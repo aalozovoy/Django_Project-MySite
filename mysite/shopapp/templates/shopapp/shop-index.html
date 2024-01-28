@@ -10,8 +10,15 @@
     <div>
         <ul>
             {% for name, price in products %}
-                <li>{{ name }} for {{ price }}$</li>
-                <span>{{ name|length_is:'2'}}</span>
+                <li>{{ name }} for {{ price|floatformat:'2g' }}$</li>
+                <span>Word length = {{ name|length }}</span>
+                {% if name|length_is:'2' %}
+                    <span>(Discount)</span>
+                {% elif name|length != '2' %}
+                    <span>(No discount)</span>
+                {% endif %}
+            {% empty %}
+                No product
             {% endfor %}
         </ul>
     </div>
