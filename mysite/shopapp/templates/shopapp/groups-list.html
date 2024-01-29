@@ -1,0 +1,27 @@
+{% extends 'shopapp/base.html' %} # импортирование
+
+{% block title %}
+    Groups list
+{% endblock %}
+
+{% block body %}
+    <h1>Groups: </h1>
+    <div>
+        {% for group in groups %}
+            <li>{{ group.name }}</li>
+            <ul>
+                {% for permissions in group.permissions.all %}
+                    <div>
+                        {{ permissions.name }}
+                        (<code>{{ permissions.codename }}</code>)
+                    </div>
+                {% empty %}
+                    No permissions
+                {% endfor %}
+            </ul>
+        {% empty %}
+            No groups
+        {% endfor %}
+    </div>
+
+{% endblock %}
