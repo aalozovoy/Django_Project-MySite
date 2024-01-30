@@ -3,7 +3,6 @@ from django.contrib.auth.models import Group
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
 from timeit import default_timer
-
 from .models import Product, Order
 
 def shop_index(request: HttpRequest):
@@ -24,8 +23,7 @@ def groups_list(request: HttpRequest):
         'groups': Group.objects.prefetch_related('permissions').all(),
     }
     return render(request, 'shopapp/groups-list.html', context=context)  # для шаблона
-
-# prefetch_related('permissions') - оптимизация количества запросов
+    ''' prefetch_related('permissions') - оптимизация количества запросов '''
 
 def products_list(request: HttpRequest):
     context = {
@@ -35,6 +33,8 @@ def products_list(request: HttpRequest):
 
 def orders_list(request: HttpRequest):
     context = {
-        'orders': Order.objects.select_related('user').prefetch_related('products').all(), # select_related('user') - искл. лишние запросы
+        'orders': Order.objects.select_related('user').prefetch_related('products').all(),
     }
+    '''prefetch_related('products') - оптимизация количества запросов
+        select_related('user') - искл. лишние запросы '''
     return render(request, 'shopapp/orders-list.html', context=context)  # для шаблона
