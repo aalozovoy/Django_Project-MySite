@@ -11,9 +11,16 @@ def shop_index(request: HttpRequest):
         ('Laptop', 5000),
         ('Smartphone', 2000),
     ]
+    links = [
+        ("Groups list", 'shop/groups/'),
+        ("Products list", 'shop/products/'),
+        ("Orders list", 'shop/orders/'),
+
+    ]
     context = {
         'time_running': default_timer(),
         'products': products,
+        'links': links,
     }
     return render(request, 'shopapp/shop-index.html', context=context) #для шаблона
 

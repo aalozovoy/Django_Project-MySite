@@ -30,6 +30,13 @@
     <div>
         {% lorem 3 p random %}
     </div>
+
+    <div>
+        <li>Sections of the site:</li>
+        {% for page, link in links %}
+            <p>{{ page }}. Url_name: {{ link }}</p>
+        {% endfor %}
+    </div>
 {% endblock %}
 
 
