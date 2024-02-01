@@ -37,7 +37,7 @@ class ProductAdmin(admin.ModelAdmin, ExpotrasCVSMixin):
     ordering = 'pk', 'name'
     ''' ordering - сортировка (от min к max, наоборот: с "-")
     сортировка по порядковому номеру, далее по имени (одинаковые товары) '''
-    search_fields = 'name', 'description'
+    search_fields = 'name', 'description', 'price', 'discount'
     ''' search_fields - поиск по 'name' или 'description' '''
     fieldsets = [
         (None, {'fields': ('name', 'description'),}),
