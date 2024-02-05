@@ -10,8 +10,6 @@ class Product(models.Model):
         # db_tablr = 'tech_products' # указывает к какой таблице обращаться
         # verbose_name_plural = 'products' # указывает как объявлять данные во множественном числе
 
-
-
     name = models.CharField(max_length=100)
     '''name - имя продукта, CharField - поле, max_length - макс. длина'''
     description = models.TextField(null=False, blank=True)
@@ -40,7 +38,7 @@ class Product(models.Model):
 
 
 class Order(models.Model):
-     delivery_address = models.TextField(null=True, blank=True)
+     delivery_address = models.CharField(max_length=500)
      promocode = models.CharField(max_length=20, null=False, blank=True)
      crested_at = models.DateTimeField(auto_now_add=True)
 

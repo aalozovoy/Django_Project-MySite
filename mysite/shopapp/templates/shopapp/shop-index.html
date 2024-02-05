@@ -37,24 +37,13 @@
             <p>{{ page }}. Url_name: {{ link }}</p>
         {% endfor %}
     </div>
+    <div>
+        <a href="{% url 'shopapp:products_list' %}">To products list</a>
+    </div>
+    <div>
+        <a href="{% url 'shopapp:orders_list' %}">To orders list</a>
+    </div>
+    <div>
+        <a href="{% url 'shopapp:groups_list' %}">To groups list</a>
+    </div>
 {% endblock %}
-
-
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title>Shop Index</title>-->
-<!--</head>-->
-<!--<body>-->
-<!--<h1>Hello Shop Index!!!</h1>-->
-<!--<div>-->
-<!--    Time running: {{ time_running }}-->
-<!--</div>-->
-
-<!--<div>-->
-<!--    {% lorem 3 p random %}-->
-<!--</div>-->
-
-<!--</body>-->
-<!--</html>-->

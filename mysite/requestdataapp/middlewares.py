@@ -22,7 +22,7 @@ class CountRequestsMiddleware:
 
     def __call__(self, request: HttpRequest):
         response = self.get_response(request)
-        delay_time = 5
+        delay_time = 0
         if request.META.get('REMOTE_ADDR') not in self.ip_time:
             self.ip_time[request.META.get('REMOTE_ADDR')] = time.time()
         elif time.time() - self.ip_time[request.META.get('REMOTE_ADDR')] <= delay_time:

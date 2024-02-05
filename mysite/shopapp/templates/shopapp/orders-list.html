@@ -28,6 +28,12 @@
     {% else %}
         <h3>No orders</h3>
     {% endif %}
+    <div>
+        <a href="{% url 'shopapp:index' %}">Back to shop</a>
+    </div>
+    <div>
+        <a href="{% url 'shopapp:create_order' %}">Create a new order</a>
+    </div>
 {% endblock %}
 
 
