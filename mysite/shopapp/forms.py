@@ -2,19 +2,41 @@ from django import forms
 from .models import Product, Order
 from django.core import validators # дополнительные валидаторы
 
+from django.forms import ModelForm
+from django.contrib.auth.models import Group
+
 
 class ProductForm(forms.ModelForm):
     '''ModelForm - генерирует форму на основе существующей модели'''
     class Meta:
         model = Product
         fields = "name", "description", "price", "discount" # название полей как в model Product
-
-# Чтобы отобразить форму на странице передаем экземпляр в views.py -> функция -> context
+# Чтобы отобразить форму на странице передаем экземпляр в views.py -> функция -> import, context
 
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = "delivery_address", "promocode", "user", "products"
+
+class GroupForm(ModelForm):
+    class Meta:
+        model = Group
+        fields = ["name"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -23,9 +45,6 @@ class OrderForm(forms.ModelForm):
     # promocode = forms.CharField(max_length=20)
     # order = forms.CharField(label='Order by', max_length=100)
     # product_in_order = forms.CharField(label='Products in order', widget=forms.Textarea)
-
-
-
 
 
 # class ProductForm(forms.Form):
