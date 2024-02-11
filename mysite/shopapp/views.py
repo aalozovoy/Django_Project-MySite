@@ -114,4 +114,3 @@ class OrderUpdateView(UpdateView):
 class OrderDeleteView(DeleteView): # шаблон order_confirm_delete
     model = Order
     success_url = reverse_lazy('shopapp:order_list')
-
