@@ -24,6 +24,7 @@ class Product(models.Model):
     auto_now_add=True - автосохранение (при создании нового)'''
     archived = models.BooleanField(default=False)
     '''archived - архивировано ли'''
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
 
     # сокращение описания в description (см. admin.py)
     # @property

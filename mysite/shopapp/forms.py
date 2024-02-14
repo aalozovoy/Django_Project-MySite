@@ -10,7 +10,7 @@ class ProductForm(forms.ModelForm):
     '''ModelForm - генерирует форму на основе существующей модели'''
     class Meta:
         model = Product
-        fields = "name", "description", "price", "discount" # название полей как в model Product
+        fields = "name", "description", "price", "discount", "created_by" # название полей как в model Product
 # Чтобы отобразить форму на странице передаем экземпляр в views.py -> функция -> import, context
 
 class OrderForm(forms.ModelForm):
