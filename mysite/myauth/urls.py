@@ -8,7 +8,8 @@ from .views import (get_cookie_view,
                     set_session_view,
                     MyLogoutView,
                     AboutMeView,
-                    RegisterView,)
+                    RegisterView,
+                    FooBarView)
 
 
 app_name = "myauth"
@@ -26,6 +27,7 @@ urlpatterns = [
     path("cookie/set/", set_cookie_view, name="cookie_set"),
     path("session/get/", get_session_view, name="session_get"),
     path("session/set/", set_session_view, name="session_set"),
+    path("foo-bar/", FooBarView.as_view(), name="foo-bar"),
 ]
 '''
 template_name="myauth/login.html" - необходимо указать шаблон (откорректировать шаблон {{ form.as_p }})

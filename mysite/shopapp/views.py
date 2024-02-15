@@ -67,7 +67,7 @@ class ProductUpdateView(UserPassesTestMixin, UpdateView):
                 and self.get_object().created_by == self.request.user)
 
     model = Product
-    fields = 'name', 'price', 'description', 'discount'
+    fields = 'name', 'price', 'description', 'discount', 'created_by'
     template_name_suffix = '_update_form'
     # т.к. UpdateView также, как и CreateView использует суффикс form
     # template_name_suffix = '_update_form' новая форма
