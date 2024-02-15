@@ -59,3 +59,5 @@ class ProductsListViewTestCase(TestCase):
     ]
     def test_products(self):
         response = self.client.get(reverse('shopapp:products_list'))
+        for product in Product.objects.filter(archived=False).all():
+            self.assertContains(response, product.name)
