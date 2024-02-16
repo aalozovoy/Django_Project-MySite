@@ -25,6 +25,7 @@ class Product(models.Model):
     archived = models.BooleanField(default=False)
     '''archived - архивировано ли'''
     created_by = models.ForeignKey(User, on_delete=models.PROTECT)
+    # created_by = models.OneToOneField(User, null=1, on_delete=models.PROTECT)
 
     # сокращение описания в description (см. admin.py)
     # @property

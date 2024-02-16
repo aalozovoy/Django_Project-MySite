@@ -1,10 +1,11 @@
-
+from django.contrib.auth.models import User
 from django.test import TestCase
 from shopapp.utils import add_two_numbers
 from django.urls import reverse
 from string import ascii_letters
 from random import choices
-from shopapp.models import Product, User
+from shopapp.models import Product
+from django.conf import settings
 
 class AddTwoNumbersTestCase(TestCase):
     def test_add_two_numbers(self):
@@ -14,9 +15,16 @@ class AddTwoNumbersTestCase(TestCase):
 
 
 class ProductCreateViewTestCase(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.user = User.objects.create_user(username='Jeck', password='1')  # создание пользователя для теста
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
     def setUp(self) -> None:
-        self.product_name = ''.join(choices(ascii_letters, k=10))
-        Product.objects.filter(self.product_name).delete()
+        self.client.force_login(self.user)
+        # self.product_name = ''.join(choices(ascii_letters, k=10))
+        # Product.objects.filter(self.product_name).delete()
     def test_product_create(self):
         response = self.client.post(
             reverse('shopapp:create_product'),
@@ -25,7 +33,7 @@ class ProductCreateViewTestCase(TestCase):
                 'price': '9999',
                 'description': 'Virtual Reality',
                 'discount': '7',
-                'created_by': 'John'
+                'created_by': self.user
             }
         )
         self.assertRedirects(response, reverse('shopapp:products_list'))
@@ -59,5 +67,29 @@ class ProductsListViewTestCase(TestCase):
     ]
     def test_products(self):
         response = self.client.get(reverse('shopapp:products_list'))
-        for product in Product.objects.filter(archived=False).all():
-            self.assertContains(response, product.name)
+        self.assertQuerysetEqual(
+            qs=Product.objects.filter(archived=False).all(), # ожидали получить
+            values=(p.pk for p in response.context['products']), # получили
+            transform=lambda p: p.pk, # преобразование данных из qs
+        )
+        self.assertTemplateUsed(response, 'shopapp/products-list.html') # проверка шаблона
+
+
+class OrdersListViewTestCase(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.user = User.objects.create_user(username='Jeck', password='1') # создание пользователя для теста
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+    def setUp(self) -> None:
+        self.client.force_login(self.user) # вход пользователя
+    def test_orders_view(self):
+        response = self.client.get(reverse('shopapp:order_list'))
+        self.assertContains(response, 'Orders')
+
+    def test_orders_view_not_authenticated(self):
+        self.client.logout()
+        response = self.client.get(reverse('shopapp:order_list'))
+        self.assertEquals(response.status_code, 302)
+        self.assertIn(str(settings.LOGIN_URL), response.url)
