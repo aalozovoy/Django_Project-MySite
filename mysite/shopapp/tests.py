@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.test import TestCase
 from shopapp.utils import add_two_numbers
 from django.urls import reverse
@@ -15,25 +15,36 @@ class AddTwoNumbersTestCase(TestCase):
 
 
 class ProductCreateViewTestCase(TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.user = User.objects.create_user(username='Jeck', password='1')  # создание пользователя для теста
-    @classmethod
-    def tearDownClass(cls):
-        cls.user.delete()
-    def setUp(self) -> None:
-        self.client.force_login(self.user)
-        # self.product_name = ''.join(choices(ascii_letters, k=10))
-        # Product.objects.filter(self.product_name).delete()
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='12345')
+        permission = Permission.objects.get(codename='add_product')
+        self.user.user_permissions.add(permission)
+        self.client.login(username='testuser', password='12345')
+        self.product_name = ''.join(choices(ascii_letters, k=10))
+        Product.objects.filter(name=self.product_name).delete()
+    # @classmethod
+    # def setUpClass(cls):
+    #     cls.user = User.objects.create_user(username='Jeck', password='1')  # создание пользователя для теста
+    #     permission = Permission.objects.get(codename='add_product')
+    #     cls.user.add(permission)
+    # @classmethod
+    # def tearDownClass(cls):
+    #     cls.user.delete()
+    # def setUp(self) -> None:
+    #     self.client.force_login(self.user)
+    #     self.client.pe
+    #     # self.product_name = ''.join(choices(ascii_letters, k=10))
+    #     # Product.objects.filter(self.product_name).delete()
+
     def test_product_create(self):
         response = self.client.post(
             reverse('shopapp:create_product'),
             {
-                'name': 'Virtual Glasses',
+                # 'name': 'Virtual Glasses',
+                'name': self.product_name,
                 'price': '9999',
                 'description': 'Virtual Reality',
-                'discount': '7',
-                'created_by': self.user
+                'discount': '7'
             }
         )
         self.assertRedirects(response, reverse('shopapp:products_list'))
