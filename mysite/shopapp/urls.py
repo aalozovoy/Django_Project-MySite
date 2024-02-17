@@ -11,13 +11,15 @@ from .views import (ShopIndexView,
                     ProductDeleteView,
                     OrderCreateView,
                     OrderDeleteView,
-                    OrderUpdateView)
+                    OrderUpdateView,
+                    ProductsExportView)
 
 app_name = "shopapp"
 urlpatterns = [
     path("", ShopIndexView.as_view(), name="index"),
     path("groups/", GroupsListView.as_view(), name="groups_list"),
     path("products/", ProductListView.as_view(), name="products_list"),
+    path("products/export/", ProductsExportView.as_view(), name="products_export"),
     path("products/create/", ProductCreateView.as_view(), name="create_product"),
     path("products/<int:pk>/", ProductDetailsView.as_view(), name="product_details"),
     path("products/<int:pk>/update/", ProductUpdateView.as_view(), name="product_update"),
