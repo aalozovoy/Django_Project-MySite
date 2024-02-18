@@ -4,7 +4,7 @@ from shopapp.utils import add_two_numbers
 from django.urls import reverse
 from string import ascii_letters
 from random import choices
-from shopapp.models import Product
+from shopapp.models import Product, Order
 from django.conf import settings
 
 class AddTwoNumbersTestCase(TestCase):
@@ -13,12 +13,12 @@ class AddTwoNumbersTestCase(TestCase):
         result = add_two_numbers(2, 3)
         self.assertEquals(result, 5) # сравнение результата с ожидаемым результатом (проверяет что из функции вернулось 5)
 
-
 class ProductCreateViewTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='12345')
         permission = Permission.objects.get(codename='add_product')
         self.user.user_permissions.add(permission)
+        self.user.save()
         self.client.login(username='testuser', password='12345')
         self.product_name = ''.join(choices(ascii_letters, k=10))
         Product.objects.filter(name=self.product_name).delete()
@@ -52,7 +52,7 @@ class ProductCreateViewTestCase(TestCase):
             Product.objects.filter(self.product_name).exists()
         )
 
-class ProductDeleteViewTestCase(TestCase):
+class ProductDetailViewTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.product = Product.objects.create(name='Best Product')
@@ -85,6 +85,31 @@ class ProductsListViewTestCase(TestCase):
         )
         self.assertTemplateUsed(response, 'shopapp/products-list.html') # проверка шаблона
 
+class OrderDetailViewTestCase(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.user = User.objects.create_user(username='Jeck', password='12345')
+        permission = Permission.objects.get(codename="view_order")
+        cls.user.user_permissions.add(permission)
+        cls.user.save()
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+    def setUp(self) -> None:
+        self.client.force_login(self.user)
+        self.order = Order.objects.create(
+            delivery_address="ul Pushkina, d 1",
+            promocode="qwerty",
+            user=self.user,
+        )
+    def tearDown(self) -> None:
+        self.order.delete()
+    def test_order_details(self):
+        response = self.client.get(reverse("shopapp:order_details", kwargs={"pk": self.order.pk}))
+        self.assertContains(response, self.order.delivery_address)
+        self.assertContains(response, self.order.promocode)
+        self.assertEqual(response.context["object"].pk, self.order.pk)
+
 
 class OrdersListViewTestCase(TestCase):
     @classmethod
@@ -104,6 +129,10 @@ class OrdersListViewTestCase(TestCase):
         response = self.client.get(reverse('shopapp:order_list'))
         self.assertEquals(response.status_code, 302)
         self.assertIn(str(settings.LOGIN_URL), response.url)
+
+
+
+
 
 class ProductsExportViewTestCase(TestCase):
     fixtures = [
