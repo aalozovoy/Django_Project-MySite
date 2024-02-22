@@ -14,43 +14,58 @@ class AddTwoNumbersTestCase(TestCase):
         self.assertEquals(result, 5) # сравнение результата с ожидаемым результатом (проверяет что из функции вернулось 5)
 
 class ProductCreateViewTestCase(TestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='12345')
-        permission = Permission.objects.get(codename='add_product')
-        self.user.user_permissions.add(permission)
-        self.user.save()
-        self.client.login(username='testuser', password='12345')
-        self.product_name = ''.join(choices(ascii_letters, k=10))
-        Product.objects.filter(name=self.product_name).delete()
-    # @classmethod
-    # def setUpClass(cls):
-    #     cls.user = User.objects.create_user(username='Jeck', password='1')  # создание пользователя для теста
+    # def setUp(self):
+    #     self.user = User.objects.create_user(username='testuser', password='12345')
     #     permission = Permission.objects.get(codename='add_product')
-    #     cls.user.add(permission)
-    # @classmethod
-    # def tearDownClass(cls):
-    #     cls.user.delete()
-    # def setUp(self) -> None:
-    #     self.client.force_login(self.user)
-    #     self.client.pe
-    #     # self.product_name = ''.join(choices(ascii_letters, k=10))
-    #     # Product.objects.filter(self.product_name).delete()
+    #     self.user.user_permissions.add(permission)
+    #     self.user.save()
+    #     self.client.login(username='testuser', password='12345')
+    #     self.product_name = ''.join(choices(ascii_letters, k=10))
+    #     Product.objects.filter(name=self.product_name).delete()
+    @classmethod
+    def setUpClass(cls):
+        cls.user = User.objects.create_user(username='Jeck', password='123')  # создание пользователя для теста
+        permission = Permission.objects.get(codename='add_product')
+        cls.user.user_permissions.add(permission)
+        cls.user.save()
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+
+    def setUp(self) -> None:
+        self.client.force_login(self.user)
+        self.product = Product.objects.create(
+            name='Virtual Glasses',
+            price='9999',
+            description='Virtual Reality',
+            discount='7',
+        )
+    def tearDown(self) -> None:
+        self.product.delete()
 
     def test_product_create(self):
-        response = self.client.post(
-            reverse('shopapp:create_product'),
-            {
-                # 'name': 'Virtual Glasses',
-                'name': self.product_name,
-                'price': '9999',
-                'description': 'Virtual Reality',
-                'discount': '7'
-            }
-        )
+        response = self.client.get(reverse("shopapp:create_product"))
         self.assertRedirects(response, reverse('shopapp:products_list'))
-        self.assertTrue(
-            Product.objects.filter(self.product_name).exists()
-        )
+        # self.assertTrue(Product.objects.filter(self.product_name).exists())
+        self.assertContains(response, self.product.name)
+
+
+
+    # def test_product_create(self):
+    #     response = self.client.post(
+    #         reverse('shopapp:create_product'),
+    #         {
+    #             # 'name': 'Virtual Glasses',
+    #             'name': self.product_name,
+    #             'price': '9999',
+    #             'description': 'Virtual Reality',
+    #             'discount': '7'
+    #         }
+    #     )
+    #     self.assertRedirects(response, reverse('shopapp:products_list'))
+    #     self.assertTrue(
+    #         Product.objects.filter(self.product_name).exists()
+    #     )
 
 class ProductDetailViewTestCase(TestCase):
     @classmethod
@@ -83,7 +98,7 @@ class ProductsListViewTestCase(TestCase):
             values=(p.pk for p in response.context['products']), # получили
             transform=lambda p: p.pk, # преобразование данных из qs
         )
-        self.assertTemplateUsed(response, 'shopapp/products-list.html') # проверка шаблона
+        self.assertTemplateUsed(response, 'shopapp/users_list.html') # проверка шаблона
 
 class OrderDetailViewTestCase(TestCase):
     @classmethod

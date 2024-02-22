@@ -11,7 +11,7 @@ from django.views.generic import (TemplateView,
                                   UpdateView,
                                   DeleteView)
 
-from .models import Product, Order # из models.py
+from .models import Product, Order, ProductImage # из models.py
 from .forms import ProductForm, OrderForm, GroupForm # из forms.py
 from django.views import View # для создания классов View
 from django.contrib.auth.mixins import (LoginRequiredMixin, # примесь на вход
@@ -42,7 +42,9 @@ class ProductDetailsView(DetailView):
     # self.get_object()
     # self.request.user(self)
     template_name = 'shopapp/products_details.html'
-    model = Product
+    # model = Product
+    queryset = Product.objects.prefetch_related('images')
+    # queryset - для вывода изображений в деталях, prefetch_related - для связи одного ко многим
     context_object_name = 'product'
 
 class ProductCreateView(PermissionRequiredMixin, CreateView): # CreateView использует суффикс form
@@ -51,7 +53,7 @@ class ProductCreateView(PermissionRequiredMixin, CreateView): # CreateView ис�
     #     return self.request.user.is_superuser
     permission_required = 'shopapp.add_product'
     model = Product
-    fields = 'name', 'price', 'description', 'discount', 'created_by'
+    fields = 'name', 'price', 'description', 'discount', 'created_by', 'preview'
     success_url = reverse_lazy('shopapp:products_list')
 
     def form_valid(self, form):
@@ -67,8 +69,9 @@ class ProductUpdateView(UserPassesTestMixin, UpdateView):
                 and self.get_object().created_by == self.request.user)
 
     model = Product
-    fields = 'name', 'price', 'description', 'discount', 'created_by'
+    # fields = 'name', 'price', 'description', 'discount', 'created_by', 'preview'
     template_name_suffix = '_update_form'
+    form_class = ProductForm
     # т.к. UpdateView также, как и CreateView использует суффикс form
     # template_name_suffix = '_update_form' новая форма
     def get_success_url(self):
@@ -76,6 +79,15 @@ class ProductUpdateView(UserPassesTestMixin, UpdateView):
             'shopapp:product_details',
             kwargs={'pk': self.object.pk},
         )
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        for image in form.files.getlist('images'):
+            ProductImage.objects.create(
+                product=self.object,
+                image=image,
+            )
+        return response
+
 
 class ProductDeleteView(UserPassesTestMixin, DeleteView): # шаблон product_confirm_delete
     def test_func(self):
