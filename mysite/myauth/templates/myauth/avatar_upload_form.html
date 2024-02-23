@@ -8,9 +8,9 @@
     <div>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ user.profile.avatar}}
+            {{ form.as_p }}
             <button type="submit">
-                Update
+                Uploading
             </button>
         </form>
     </div>
