@@ -7,7 +7,7 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse, reverse_lazy
-from django.views.generic import TemplateView, CreateView, ListView, DetailView
+from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView
 
 from .forms import ProfileForm
 from .models import Profile
@@ -15,44 +15,55 @@ from django.views import View
 
 
 
-class UserListView(View):
-    def get(self, request):
-        users = User.objects.all()
-        return render(request, 'myauth/users_list.html', {'users': users})
+class UserListView(ListView):
+    template_name = 'myauth/user_list.html'
+    model = User
+    context_object_name = 'users'
 
 class UserDetailsView(DetailView):
-    template_name = 'shopapp/user_details.html'
-    model = Profile
+    template_name = 'myauth/user_detail.html'
+    model = User
     context_object_name = 'user'
 
-
-class AboutMeView(TemplateView):
+class AboutMeView(ListView):
     template_name = 'myauth/about_me.html'
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # context['form'] = ProfileForm()
-        context['avatar'] = self.request.user.profile.avatar.url if self.request.user.profile.avatar else None
-        return context
-    def post(self, request):
-        form = ProfileForm(request.POST, request.FILES)
-        if form.is_valid():
-            profile = form.save(commit=False)
-            profile.user = request.user
-            profile.save()
-            return render(request, 'myauth/about_me.html', {'form': form, 'success_message': 'Avatar uploaded successfully!'})
-        return render(request, 'myauth/about_me.html', {'form': form})
+    model = Profile
+    context_object_name = 'profiles'
 
-class UploadAvatarView(View):
-    def post(self, request):
-        avatar = request.FILES['avatar']
-        user = request.user
-        try:
-            profile = user.profile
-        except Profile.DoesNotExist:
-            profile = Profile(user=user)
-        profile.avatar = avatar
-        profile.save()
-        return render(request, 'myauth/about_me.html')
+class UploadAvatarView(UpdateView):
+    template_name = 'myauth/avatar_upload_form.html'
+    model = Profile
+    fields = ('avatar',)
+    success_url = reverse_lazy('myauth:about_me')
+
+
+# class AboutMeView(TemplateView):
+#     template_name = 'myauth/about_me.html'
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['form'] = ProfileForm()
+#         context['avatar'] = self.request.user.profile.avatar.url if self.request.user.profile.avatar else None
+#         return context
+#     def post(self, request):
+#         form = ProfileForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             profile = form.save(commit=False)
+#             profile.user = request.user
+#             profile.save()
+#             return render(request, 'myauth/about_me.html', {'form': form, 'success_message': 'Avatar uploaded successfully!'})
+#         return render(request, 'myauth/about_me.html', {'form': form})
+
+# class UploadAvatarView(View):
+#     def post(self, request):
+#         avatar = request.FILES['avatar']
+#         user = request.user
+#         try:
+#             profile = user.profile
+#         except Profile.DoesNotExist:
+#             profile = Profile(user=user)
+#         profile.avatar = avatar
+#         profile.save()
+#         return render(request, 'myauth/about_me.html')
 
 class RegisterView(CreateView):
     form_class = UserCreationForm # UserCreationForm - готовая форма

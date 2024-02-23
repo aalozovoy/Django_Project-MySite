@@ -8,12 +8,12 @@
     <h1>User info</h1>
     {% if user.is_authenticated %}
         <h2>Detail:</h2>
-        {% if avatar %}
+        {% if user.profile.avatar %}
             <img src="{{ user.profile.avatar.url }}">
         {% else %}
             <div>No avatar</div>
         {% endif %}
-        <a href="{% url 'myauth:upload_avatar' %}">Upload Avatar</a>
+        <a href="{% url 'myauth:upload_avatar' pk=user.pk %}">Upload Avatar</a>
         <p>{{ Profile }}</p>
         <p>Username: {{ user.username }}</p>
         <p>First name: {{ user.first_name }}</p>
@@ -23,7 +23,4 @@
     {% else %}
         <h2>User is anonymous</h2>
     {% endif %}
-    <div>
-        <a href="{% url 'myauth:users_list' %}">Back to users</a>
-    </div>
 {% endblock %}
