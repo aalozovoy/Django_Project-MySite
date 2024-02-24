@@ -16,8 +16,11 @@
                         <p>No avatar</p>
                     {% endif %}
                 </p>
-                <h3><a href="{% url 'myauth:user_detail' pk=user.pk %}">
-                        Name: {{ user.username }}</a></h3>
+                <h2><a href="{% url 'myauth:user_detail' pk=user.pk %}">
+                        Name: {{ user.username }}</a></h2>
+                {% if request.user.is_staff and not user.is_superuser or request.user.is_superuser %}
+                    <a href="{% url 'myauth:upload_avatar' pk=user.pk %}">Uploading (changing) an Avatar</a>
+                {% endif %}
             {% endfor %}
         </div>
     {% else %}

@@ -15,7 +15,6 @@
                 <div>No avatar</div>
             {% endif %}
         </p>
-
         <a href="{% url 'myauth:upload_avatar' pk=user.pk %}">Uploading (changing) an Avatar</a>
         <p>{{ Profile }}</p>
         <p>Username: {{ user.username }}</p>

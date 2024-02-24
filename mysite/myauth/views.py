@@ -30,40 +30,22 @@ class AboutMeView(ListView):
     model = Profile
     context_object_name = 'profiles'
 
-class UploadAvatarView(UpdateView):
+class UploadAvatarView(UserPassesTestMixin, UpdateView):
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.id == self.kwargs['pk']
     template_name = 'myauth/avatar_upload_form.html'
     model = Profile
     fields = ('avatar',)
-    success_url = reverse_lazy('myauth:about_me')
+    success_url = reverse_lazy('myauth:users_list')
 
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        user = User.objects.select_related("profile").get(pk=pk)
+        try:
+            return user.profile
+        except Profile.DoesNotExist:
+            return Profile.objects.create(user=user)
 
-# class AboutMeView(TemplateView):
-#     template_name = 'myauth/about_me.html'
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['form'] = ProfileForm()
-#         context['avatar'] = self.request.user.profile.avatar.url if self.request.user.profile.avatar else None
-#         return context
-#     def post(self, request):
-#         form = ProfileForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             profile = form.save(commit=False)
-#             profile.user = request.user
-#             profile.save()
-#             return render(request, 'myauth/about_me.html', {'form': form, 'success_message': 'Avatar uploaded successfully!'})
-#         return render(request, 'myauth/about_me.html', {'form': form})
-
-# class UploadAvatarView(View):
-#     def post(self, request):
-#         avatar = request.FILES['avatar']
-#         user = request.user
-#         try:
-#             profile = user.profile
-#         except Profile.DoesNotExist:
-#             profile = Profile(user=user)
-#         profile.avatar = avatar
-#         profile.save()
-#         return render(request, 'myauth/about_me.html')
 
 class RegisterView(CreateView):
     form_class = UserCreationForm # UserCreationForm - готовая форма

@@ -11,6 +11,6 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
     agreement_accepted = models.BooleanField(default=False)
-    avatar = models.ImageField(User, null=True, blank=True, upload_to=user_avatar_dir_path)
+    avatar = models.ImageField(null=True, blank=True, upload_to=user_avatar_dir_path)
 
 
