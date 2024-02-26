@@ -29,7 +29,8 @@ msgstr "Привет, Мир!"
 msgid "one product"
 msgid_plural "{count} products"
 msgstr[0] "{count} товар"
-msgstr[1] "{count} товар"
+msgstr[1] "{count} товара"
+msgstr[2] "{count} товаров"
 
 #: mysite/settings.py:129
 msgid "English"
@@ -59,11 +60,16 @@ msgid_plural ""
 "            "
 msgstr[0] ""
 "\n"
-"                Доступен только один товар.\n"
+"                Доступен %(product_count)s товар.\n"
 "                "
 msgstr[1] ""
 "\n"
-"                Доступны %(product_count)s товаров.\n"
+"                Доступны %(product_count)s товара.\n"
+"            "
+
+msgstr[2] ""
+"\n"
+"                Доступно %(product_count)s товаров.\n"
 "            "
 
 #: shopapp/templates/shopapp/products-list.html:22
