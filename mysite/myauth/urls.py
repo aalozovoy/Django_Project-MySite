@@ -12,7 +12,8 @@ from .views import (get_cookie_view,
                     FooBarView,
                     UserListView,
                     UserDetailsView,
-                    UploadAvatarView)
+                    UploadAvatarView,
+                    HelloView)
 
 
 app_name = "myauth"
@@ -23,6 +24,7 @@ urlpatterns = [
                            redirect_authenticated_user=True,
                            ),
         name="login"),
+    path("hello/", HelloView.as_view(), name="hello"),
     path("logout/", MyLogoutView.as_view(), name="logout"),
     path("about_me/", AboutMeView.as_view(), name="about_me"),
     path("about_me/<int:pk>/upload_avatar/", UploadAvatarView.as_view(), name="upload_avatar"),

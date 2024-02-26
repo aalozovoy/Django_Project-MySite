@@ -12,7 +12,26 @@ from django.views.generic import TemplateView, CreateView, ListView, DetailView,
 from .forms import ProfileForm
 from .models import Profile
 from django.views import View
+from django.utils.translation import gettext as __ # для перевода (as _ - для обращения)
+from django.utils.translation import gettext_lazy as _, ngettext # для ленивого перевода (as _ - для обращения)
 
+# локализация - перевод
+class HelloView(View):
+    welcome_message = _('Welcome hello world!')  # текст подготовленный для перевода при обращении (в функции ниже)
+    def get(self, request: HttpRequest) -> HttpResponse:
+        items_str = request.GET.get('items') or 0 # количество элементов или 0
+        items = int(items_str) # перевод в число
+        products_line = ngettext('one product', '{count} products', items,)
+        products_line = products_line.format(count=items)
+        return HttpResponse(
+            f'<h1>{self.welcome_message}</h1>'
+            f'<h2>{products_line}</h2>'
+        )
+
+# class HelloView(View):
+#     def get(self, request: HttpRequest) -> HttpResponse:
+#         welcome_message = _('Welcome hello world!') # текст для перевода
+#         return HttpResponse(f'<h1>{welcome_message}</h1>')
 
 
 class UserListView(ListView):
@@ -45,7 +64,6 @@ class UploadAvatarView(UserPassesTestMixin, UpdateView):
             return user.profile
         except Profile.DoesNotExist:
             return Profile.objects.create(user=user)
-
 
 class RegisterView(CreateView):
     form_class = UserCreationForm # UserCreationForm - готовая форма
