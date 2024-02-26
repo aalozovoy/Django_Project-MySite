@@ -16,7 +16,7 @@
         {% if product.preview %}
             <img src="{{ product.preview.url }}">
         {% endif %}
-        <h3>{% translate 'Images' %} :</h3>
+        <h3>{% translate 'Images' %}:</h3>
         {% if product.images.all  %}
             <div>
                 {% blocktranslate count img_count=product.images.all|length %}

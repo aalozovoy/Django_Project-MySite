@@ -126,7 +126,7 @@ msgstr "Архивация"
 
 #: shopapp/templates/shopapp/products_details.html:19
 msgid "Images"
-msgstr "Изображение"
+msgstr "Изображения"
 
 #: shopapp/templates/shopapp/products_details.html:22
 #, python-format
@@ -144,12 +144,16 @@ msgstr[0] ""
 "                    "
 msgstr[1] ""
 "\n"
+"                    Доступно %(img_count)s изображения.\n"
+"                "
+msgstr[2] ""
+"\n"
 "                    Доступно %(img_count)s изображений.\n"
 "                "
 
 #: shopapp/templates/shopapp/products_details.html:36
 msgid "No images"
-msgstr "Доступно отсктствуют"
+msgstr "Изображения отсутствуют"
 
 #: shopapp/templates/shopapp/products_details.html:41
 msgid "Update product"
