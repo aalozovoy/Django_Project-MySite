@@ -26,6 +26,8 @@ from django.conf.urls.i18n import i18n_patterns # для явного опред
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('req/', include('requestdataapp.urls')),
+    path('api/', include('myapiapp.urls')),
+    path('api/', include('shopapp.urls')),
 ]
 
 urlpatterns += i18n_patterns(

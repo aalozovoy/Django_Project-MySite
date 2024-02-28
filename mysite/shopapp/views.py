@@ -19,6 +19,56 @@ from django.contrib.auth.mixins import (LoginRequiredMixin, # примесь н�
                                         UserPassesTestMixin) # примесь ограничение для всех кроме superuser
 
 
+
+from rest_framework.viewsets import ModelViewSet
+from .serializers import ProductSerializers, OrderSerializers
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
+
+
+class OrderViewSet(ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializers
+    filter_backends = [
+        SearchFilter,
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]
+    search_fields = ['delivery_address', 'user',]
+    filterset_fields = [
+        'delivery_address',
+        'promocode',
+        'crested_at',
+        'user',
+        'products',
+    ]
+    ordering_fields = [
+        'delivery_address',
+        'promocode',
+        'crested_at',
+        'user',
+        'products',
+    ]
+
+
+class ProductViewSet(ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializers
+    filter_backends = [
+        SearchFilter,
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]
+    search_fields = ['name', 'description',]
+    filterset_fields = [
+        'name',
+        'description',
+        'price',
+        'discount',
+        'archived',
+    ]
+    ordering_fields = ['name', 'price', 'discount',]
+
 class ShopIndexView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
         products = [
