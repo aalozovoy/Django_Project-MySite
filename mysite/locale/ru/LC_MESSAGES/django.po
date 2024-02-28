@@ -1,0 +1,168 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-02-26 17:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: myauth/views.py:20
+msgid "Welcome hello world!"
+msgstr "Привет, Мир!"
+
+#: myauth/views.py:24
+#, python-brace-format
+msgid "one product"
+msgid_plural "{count} products"
+msgstr[0] "{count} товар"
+msgstr[1] "{count} товара"
+msgstr[2] "{count} товаров"
+
+#: mysite/settings.py:129
+msgid "English"
+msgstr "Английский"
+
+#: mysite/settings.py:130
+msgid "Russian"
+msgstr "Русский"
+
+#: shopapp/templates/shopapp/products-list.html:5
+msgid "Products list"
+msgstr "Список товаров"
+
+#: shopapp/templates/shopapp/products-list.html:9
+msgid "Products"
+msgstr "Товары"
+
+#: shopapp/templates/shopapp/products-list.html:12
+#, python-format
+msgid ""
+"\n"
+"                There is only one product.\n"
+"                "
+msgid_plural ""
+"\n"
+"                There are %(product_count)s products.\n"
+"            "
+msgstr[0] ""
+"\n"
+"                Доступен %(product_count)s товар.\n"
+"                "
+msgstr[1] ""
+"\n"
+"                Доступны %(product_count)s товара.\n"
+"            "
+
+msgstr[2] ""
+"\n"
+"                Доступно %(product_count)s товаров.\n"
+"            "
+
+#: shopapp/templates/shopapp/products-list.html:22
+msgctxt "product name"
+msgid "Name"
+msgstr "Имя"
+
+#: shopapp/templates/shopapp/products-list.html:23
+#: shopapp/templates/shopapp/products_details.html:13
+msgid "Price"
+msgstr "Цена"
+
+#: shopapp/templates/shopapp/products-list.html:24
+msgid "no discount"
+msgstr "Скидка отсутствует"
+
+#: shopapp/templates/shopapp/products-list.html:25
+#: shopapp/templates/shopapp/products_details.html:14
+msgid "Discount"
+msgstr "Скидка"
+
+#: shopapp/templates/shopapp/products-list.html:26
+msgid "no information"
+msgstr "Информация отсутствует"
+
+#: shopapp/templates/shopapp/products-list.html:27
+msgid "Created by"
+msgstr "Создал"
+
+#: shopapp/templates/shopapp/products-list.html:36
+msgid "No products"
+msgstr "Товар отсутствует"
+
+#: shopapp/templates/shopapp/products-list.html:41
+msgid "Create a new product"
+msgstr "Создать новый товар"
+
+#: shopapp/templates/shopapp/products-list.html:45
+msgid "Back to shop"
+msgstr "Назад в магазин"
+
+#: shopapp/templates/shopapp/products_details.html:5
+#: shopapp/templates/shopapp/products_details.html:10
+msgid "Product"
+msgstr "Товар"
+
+#: shopapp/templates/shopapp/products_details.html:12
+msgid "Description"
+msgstr "Описание"
+
+#: shopapp/templates/shopapp/products_details.html:15
+msgid "Archived"
+msgstr "Архивация"
+
+#: shopapp/templates/shopapp/products_details.html:19
+msgid "Images"
+msgstr "Изображения"
+
+#: shopapp/templates/shopapp/products_details.html:22
+#, python-format
+msgid ""
+"\n"
+"                    There is only one image.\n"
+"                    "
+msgid_plural ""
+"\n"
+"                    There are %(img_count)s images.\n"
+"                "
+msgstr[0] ""
+"\n"
+"                    Доступно только одно изображение.\n"
+"                    "
+msgstr[1] ""
+"\n"
+"                    Доступно %(img_count)s изображения.\n"
+"                "
+msgstr[2] ""
+"\n"
+"                    Доступно %(img_count)s изображений.\n"
+"                "
+
+#: shopapp/templates/shopapp/products_details.html:36
+msgid "No images"
+msgstr "Изображения отсутствуют"
+
+#: shopapp/templates/shopapp/products_details.html:41
+msgid "Update product"
+msgstr "Изменить товар"
+
+#: shopapp/templates/shopapp/products_details.html:44
+msgid "Delete (archived) product"
+msgstr "Удалить (архивировать) товар"
+
+#: shopapp/templates/shopapp/products_details.html:47
+msgid "Back to products list"
+msgstr "Назад к списку товаров"

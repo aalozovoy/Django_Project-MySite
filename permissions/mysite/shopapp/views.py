@@ -21,7 +21,7 @@ class ProductDetailsView(DetailView):
 
 
 class ProductsListView(ListView):
-    template_name = "shopapp/products-list.html"
+    template_name = "shopapp/users_list.html"
     context_object_name = "products"
     queryset = Product.objects.filter(archived=False)
 

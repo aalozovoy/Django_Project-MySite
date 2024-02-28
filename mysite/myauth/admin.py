@@ -1,3 +1,8 @@
 from django.contrib import admin
+from .models import Profile
 
-# Register your models here.
+
+admin.site.register(Profile) # регистрация модели
+# class ProfileInline(admin.TabularInline):
+#     ''' ProfileInline подключает встроенные записи '''
+#     model = Profile.avatar

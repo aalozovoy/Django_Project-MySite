@@ -1,12 +1,17 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+
+def product_preview_dir_path(instance: 'Product', filename: str) -> str:
+    return 'products/product_{pk}/preview/{filename}'.format(
+        pk=instance.pk,
+        filename=filename,
+    )
 class Product(models.Model):
     class Meta:
         ordering = ['price', 'name']
         '''ordering - сортировка, ['price', 'name'] - по цене,
         затем по имени (от min к max, наоборот: с "-")'''
-
         # db_tablr = 'tech_products' # указывает к какой таблице обращаться
         # verbose_name_plural = 'products' # указывает как объявлять данные во множественном числе
 
@@ -24,7 +29,10 @@ class Product(models.Model):
     auto_now_add=True - автосохранение (при создании нового)'''
     archived = models.BooleanField(default=False)
     '''archived - архивировано ли'''
-    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
+    # created_by = models.OneToOneField(User, null=True, on_delete=models.PROTECT)
+    preview = models.ImageField(null=True, blank=True, upload_to=product_preview_dir_path)
+    # upload_to=product_preview_dir_path - путь к папке с файлами (через кастомную функцию)
 
     # сокращение описания в description (см. admin.py)
     # @property
@@ -38,6 +46,14 @@ class Product(models.Model):
         ''' представление объекта в админ панели, !r - в " " '''
 
 
+def product_imges_dir_path(instance: 'ProductImage', filename: str) -> str:
+    return f'products/product_{instance.product.pk}/preview/{filename}'
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to=product_imges_dir_path)
+    description = models.CharField(max_length=200, null=True, blank=True)
+
+
 class Order(models.Model):
      delivery_address = models.CharField(max_length=500)
      promocode = models.CharField(max_length=20, null=False, blank=True)
@@ -47,4 +63,6 @@ class Order(models.Model):
      ''' связь с user, on_delete=models.PROTECT - защита от удаления заказов и user '''
      products = models.ManyToManyField(Product, related_name='orders')
      ''' связь с products через 'orders' '''
+     receipt = models.FileField(null=True, upload_to='orders/receipts/')
+     # upload_to='orders/receipts/' - путь к папке с файлами
 

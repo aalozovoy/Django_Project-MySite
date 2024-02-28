@@ -14,13 +14,34 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+from django.conf import settings # импорт настроек (для того чтобы понять состояние сервера debug/production)
+from django.conf.urls.static import static # пути к статике
 from django.contrib import admin
 from django.urls import path, include
 '''добавили include - включить'''
 
+from django.conf.urls.i18n import i18n_patterns # для явного определения выбранного языка
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('shop/', include('shopapp.urls')),
     path('req/', include('requestdataapp.urls')),
-    path('accounts/', include('myauth.urls')),
+    path('api/', include('myapiapp.urls')),
+    path('api/', include('shopapp.urls')),
 ]
+
+urlpatterns += i18n_patterns(
+    path('accounts/', include('myauth.urls')),
+    path('shop/', include('shopapp.urls')),
+)
+
+
+if settings.DEBUG:
+    urlpatterns.extend(
+        static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    )
+    # MEDIA_URL и MEDIA_ROOT - указать в settings (под статикой)
+
+    urlpatterns.extend(
+        static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    )

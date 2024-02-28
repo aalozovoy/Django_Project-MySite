@@ -1,5 +1,5 @@
 from django.contrib.auth.models import Group
-from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
+from django.http import HttpResponse, HttpRequest, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, reverse, get_object_or_404, reverse
 from timeit import default_timer
 
@@ -11,13 +11,63 @@ from django.views.generic import (TemplateView,
                                   UpdateView,
                                   DeleteView)
 
-from .models import Product, Order # из models.py
+from .models import Product, Order, ProductImage # из models.py
 from .forms import ProductForm, OrderForm, GroupForm # из forms.py
 from django.views import View # для создания классов View
 from django.contrib.auth.mixins import (LoginRequiredMixin, # примесь на вход
                                         PermissionRequiredMixin, # примесь ограничение
                                         UserPassesTestMixin) # примесь ограничение для всех кроме superuser
 
+
+
+from rest_framework.viewsets import ModelViewSet
+from .serializers import ProductSerializers, OrderSerializers
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
+
+
+class OrderViewSet(ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializers
+    filter_backends = [
+        SearchFilter,
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]
+    search_fields = ['delivery_address', 'user',]
+    filterset_fields = [
+        'delivery_address',
+        'promocode',
+        'crested_at',
+        'user',
+        'products',
+    ]
+    ordering_fields = [
+        'delivery_address',
+        'promocode',
+        'crested_at',
+        'user',
+        'products',
+    ]
+
+
+class ProductViewSet(ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializers
+    filter_backends = [
+        SearchFilter,
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]
+    search_fields = ['name', 'description',]
+    filterset_fields = [
+        'name',
+        'description',
+        'price',
+        'discount',
+        'archived',
+    ]
+    ordering_fields = ['name', 'price', 'discount',]
 
 class ShopIndexView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
@@ -29,6 +79,7 @@ class ShopIndexView(View):
         context = {
             'time_running': default_timer(),
             'products': products,
+            'items': 1,
         }
         return render(request, 'shopapp/shop-index.html', context=context)
 
@@ -42,7 +93,9 @@ class ProductDetailsView(DetailView):
     # self.get_object()
     # self.request.user(self)
     template_name = 'shopapp/products_details.html'
-    model = Product
+    # model = Product
+    queryset = Product.objects.prefetch_related('images')
+    # queryset - для вывода изображений в деталях, prefetch_related - для связи одного ко многим
     context_object_name = 'product'
 
 class ProductCreateView(PermissionRequiredMixin, CreateView): # CreateView использует суффикс form
@@ -51,7 +104,7 @@ class ProductCreateView(PermissionRequiredMixin, CreateView): # CreateView ис�
     #     return self.request.user.is_superuser
     permission_required = 'shopapp.add_product'
     model = Product
-    fields = 'name', 'price', 'description', 'discount', 'created_by'
+    fields = 'name', 'price', 'description', 'discount', 'created_by', 'preview'
     success_url = reverse_lazy('shopapp:products_list')
 
     def form_valid(self, form):
@@ -67,8 +120,9 @@ class ProductUpdateView(UserPassesTestMixin, UpdateView):
                 and self.get_object().created_by == self.request.user)
 
     model = Product
-    fields = 'name', 'price', 'description', 'discount'
+    # fields = 'name', 'price', 'description', 'discount', 'created_by', 'preview'
     template_name_suffix = '_update_form'
+    form_class = ProductForm
     # т.к. UpdateView также, как и CreateView использует суффикс form
     # template_name_suffix = '_update_form' новая форма
     def get_success_url(self):
@@ -76,6 +130,15 @@ class ProductUpdateView(UserPassesTestMixin, UpdateView):
             'shopapp:product_details',
             kwargs={'pk': self.object.pk},
         )
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        for image in form.files.getlist('images'):
+            ProductImage.objects.create(
+                product=self.object,
+                image=image,
+            )
+        return response
+
 
 class ProductDeleteView(UserPassesTestMixin, DeleteView): # шаблон product_confirm_delete
     def test_func(self):
@@ -144,3 +207,17 @@ class GroupsListView(View):
         if form.is_valid():
             form.save()
         return redirect(request.path)
+
+class ProductsExportView(View):
+    def get(self, request: HttpRequest) -> JsonResponse:
+        products = Product.objects.order_by('pk').all()
+        products_data = [
+            {
+                'pk': products.pk,
+                'name': products.name,
+                'price': products.price,
+                'archived': products.archived,
+            }
+            for product in products
+        ]
+        return JsonResponse({'products': products_data})
