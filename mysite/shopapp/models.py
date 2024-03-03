@@ -8,6 +8,13 @@ def product_preview_dir_path(instance: 'Product', filename: str) -> str:
         filename=filename,
     )
 class Product(models.Model):
+    """
+    Модель Product представляет товар,
+    который можно продавать в интернет-магазине.
+
+    Заказы:  :model:'shopapp.Order'
+    """
+
     class Meta:
         ordering = ['price', 'name']
         '''ordering - сортировка, ['price', 'name'] - по цене,

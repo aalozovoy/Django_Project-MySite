@@ -24,6 +24,8 @@ from rest_framework.viewsets import ModelViewSet
 from .serializers import ProductSerializers, OrderSerializers
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema, OpenApiResponse
+
 
 
 class OrderViewSet(ModelViewSet):
@@ -51,7 +53,12 @@ class OrderViewSet(ModelViewSet):
     ]
 
 
+@extend_schema(description='Product views CRUD')
 class ProductViewSet(ModelViewSet):
+    """
+    Набор представлений для действий над Product.
+    Полный CRUD для сущности товара.
+    """
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
     filter_backends = [
@@ -68,6 +75,17 @@ class ProductViewSet(ModelViewSet):
         'archived',
     ]
     ordering_fields = ['name', 'price', 'discount',]
+
+    @extend_schema(
+        summary='Get one product by ID',
+        description='Retrieves product, returns 404 if not found',
+        responses={
+            200: ProductSerializers,
+            400: OpenApiResponse(description='Empty response, product by id not found'),
+        }
+    )
+    def retrieve(self, *args, **kwargs):
+        return super().retrieve(*args, **kwargs)
 
 class ShopIndexView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
