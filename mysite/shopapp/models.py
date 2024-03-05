@@ -22,9 +22,9 @@ class Product(models.Model):
         # db_tablr = 'tech_products' # указывает к какой таблице обращаться
         # verbose_name_plural = 'products' # указывает как объявлять данные во множественном числе
 
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, db_index=True)
     '''name - имя продукта, CharField - поле, max_length - макс. длина'''
-    description = models.TextField(null=False, blank=True)
+    description = models.TextField(null=False, blank=True, db_index=True)
     '''description - описание продукта, TextField - большое текстовое поле'''
     price = models.DecimalField(default=0, max_digits=8, decimal_places=2)
     '''price - цена, DecimalField - для работы с деньгами, default - по умолчанию,

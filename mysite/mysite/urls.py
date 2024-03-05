@@ -37,6 +37,7 @@ urlpatterns = [
 urlpatterns += i18n_patterns(
     path('accounts/', include('myauth.urls')),
     path('shop/', include('shopapp.urls')),
+    path('blog/', include('blogapp.urls')),
 )
 
 

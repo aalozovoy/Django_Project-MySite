@@ -157,7 +157,6 @@ class ProductUpdateView(UserPassesTestMixin, UpdateView):
             )
         return response
 
-
 class ProductDeleteView(UserPassesTestMixin, DeleteView): # шаблон product_confirm_delete
     def test_func(self):
         return self.request.user.is_superuser
@@ -170,7 +169,6 @@ class ProductDeleteView(UserPassesTestMixin, DeleteView): # шаблон product
         return HttpResponseRedirect(success_url)
 
 
-
 class OrdersListView(LoginRequiredMixin, ListView):
     queryset = (
         Order.objects
@@ -179,6 +177,7 @@ class OrdersListView(LoginRequiredMixin, ListView):
     )
     # переименовать шаблон на order_list (order - имя модели, list - суффикс)
     # object_list в шаблоне вместо orders
+    # prefetch_related - связь ко многим
 
 class OrdersDetailsView(PermissionRequiredMixin, DetailView):
     permission_required = 'shopapp.view_order'
