@@ -31,7 +31,7 @@ urlpatterns = [
     path('api/schema/redoc', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('api/schema/swagger', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger'),
     path('api/', include('myapiapp.urls')),
-    path('api/', include('shopapp.urls')),
+    # path('api/', include('shopapp.urls')),
 ]
 
 urlpatterns += i18n_patterns(
@@ -50,3 +50,9 @@ if settings.DEBUG:
     urlpatterns.extend(
         static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     )
+
+urlpatterns.append(
+    path(
+        "__debug__/", include("debug_toolbar.urls")
+    ),
+)

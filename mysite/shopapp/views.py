@@ -26,6 +26,9 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 
+import logging
+
+log = logging. getLogger(__name__)
 
 
 class OrderViewSet(ModelViewSet):
@@ -99,6 +102,8 @@ class ShopIndexView(View):
             'products': products,
             'items': 1,
         }
+        log.debug("Products for shop index: %s", products)
+        log.info("Rendering shop index")
         return render(request, 'shopapp/shop-index.html', context=context)
 
 class ProductListView(ListView):
@@ -228,13 +233,16 @@ class GroupsListView(View):
 class ProductsExportView(View):
     def get(self, request: HttpRequest) -> JsonResponse:
         products = Product.objects.order_by('pk').all()
-        products_data = [
-            {
-                'pk': products.pk,
-                'name': products.name,
-                'price': products.price,
-                'archived': products.archived,
+        products_data = []
+        for product in products:
+            product_data = {
+                'pk': product.pk,
+                'name': product.name,
+                'price': product.price,
+                'archived': product.archived,
             }
-            for product in products
-        ]
+            products_data.append(product_data)
+        elem = products_data[0]
+        name = elem["name"]
+        print("name:", name)
         return JsonResponse({'products': products_data})
