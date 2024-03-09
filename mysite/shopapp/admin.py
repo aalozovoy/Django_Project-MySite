@@ -1,8 +1,12 @@
 from django.contrib import admin
 from django.db.models import QuerySet
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import render
+from django.urls import path
+
 from .models import Product, Order, ProductImage
 from .admin_mixins import ExpotrasCVSMixin
+from .forms import CSVImportForm
 
 class OrderInline(admin.TabularInline):
     ''' ProductInline подключает встроенные записи '''
@@ -63,6 +67,7 @@ class ProductAdmin(admin.ModelAdmin, ExpotrasCVSMixin):
         'wide' - добавляет расстояние по ширине 
         'archived' - заархивированный (description - описание (Дополнительные опции. Поле "Архивировано" предназначено для мягкого удаления)) '''
 
+    change_list_template = "shopapp/products_changelist.html"
     def description_short(self, obj: Product) -> str:
         ''' сокращение описания в description прописывается здесь,
         если нужен только для админ панели, иначе в models.py '''
@@ -70,6 +75,24 @@ class ProductAdmin(admin.ModelAdmin, ExpotrasCVSMixin):
             return obj.description
         return obj.description[:50] + '...'
 # admin.site.register(Product, ProductAdmin) # 1 вариант
+
+    def import_csv(self, request: HttpRequest) -> HttpResponse:
+        form = CSVImportForm()
+        context = {
+        'form': form,
+        }
+        return render(request, "admin/csv_form.html", context)
+
+    def get_urls(self):
+        urls = super().get_urls()
+        new_urls = [
+            path(
+                "import-products-csv/",
+                self.import_csv,
+                name="import_products_csv",
+            ),
+        ]
+        return new_urls + urls
 
 
 # class ProductInline(admin.TabularInline):

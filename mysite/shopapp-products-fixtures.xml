@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object model="shopapp.product" pk="1">
+        <field name="name" type="CharField">TV</field>
+        <field name="description" type="TextField">Smart TV</field>
+        <field name="price" type="DecimalField">4999.00</field>
+        <field name="discount" type="SmallIntegerField">25</field>
+        <field name="crested_at" type="DateTimeField">2024-01-27T18:37:35.472824+00:00</field>
+        <field name="archived" type="BooleanField">False</field>
+        <field name="created_by" rel="ManyToOneRel" to="auth.user">
+            <None></None>
+        </field>
+        <field name="preview" type="FileField"></field>
+    </object>
+    <object model="shopapp.product" pk="2">
+        <field name="name" type="CharField">Laptop</field>
+        <field name="description" type="TextField"></field>
+        <field name="price" type="DecimalField">2999.00</field>
+        <field name="discount" type="SmallIntegerField">0</field>
+        <field name="crested_at" type="DateTimeField">2024-01-27T18:37:35.472824+00:00</field>
+        <field name="archived" type="BooleanField">False</field>
+        <field name="created_by" rel="ManyToOneRel" to="auth.user">4</field>
+        <field name="preview" type="FileField"></field>
+    </object>
+    <object model="shopapp.product" pk="3">
+        <field name="name" type="CharField">Smartphone</field>
+        <field name="description" type="TextField">Smartphone is a mobile phone (modern — usually with a touch screen),
+            complemented by the functionality of a smart device.
+
+            Also, the communicator is originally a pocket personal computer, complemented by the functionality of a
+            mobile phone. Currently, the boundary between the terms "smartphone" and "communicator" can be considered
+            completely erased.
+
+            Although mobile phones almost always had additional functions (calculator, calendar), more and more
+            intelligent models were released over time. In order to emphasize the increased functionality and computing
+            power of such models, the term "smartphone" was introduced. In the era of the growing popularity of
+            smartphones, they began to be produced with mobile phone functions, such devices were called communicators.
+            Currently, the division into smartphones and communicators is no longer relevant, now both terms mean the
+            same thing — a miniature universal computer with full-fledged user interfaces and advanced radio interfaces
+            of a mobile phone, the term "communicator" has practically ceased to be used.
+
+            Smartphones differ from conventional mobile phones by having an operating system open to software
+            development by third-party developers (the operating system of conventional mobile phones is closed to
+            third-party developers). Installing additional applications allows you to significantly improve the
+            functionality of smartphones compared to conventional mobile phones.
+
+            However, recently the line between "regular" phones and smartphones has been increasingly blurred, new
+            phones (with the exception of the cheapest models) have long acquired functionality once inherent only in
+            smartphones, for example, email and HTML browser, as well as multitasking.
+        </field>
+        <field name="price" type="DecimalField">1999.00</field>
+        <field name="discount" type="SmallIntegerField">10</field>
+        <field name="crested_at" type="DateTimeField">2024-01-27T18:37:35.472824+00:00</field>
+        <field name="archived" type="BooleanField">False</field>
+        <field name="created_by" rel="ManyToOneRel" to="auth.user">1</field>
+        <field name="preview" type="FileField">products/product_3/preview/iPhone-16-Pro-Mock-Header-Updated_large.png
+        </field>
+    </object>
+    <object model="shopapp.product" pk="4">
+        <field name="name" type="CharField">Watch</field>
+        <field name="description" type="TextField">Smart Watch</field>
+        <field name="price" type="DecimalField">1000.00</field>
+        <field name="discount" type="SmallIntegerField">0</field>
+        <field name="crested_at" type="DateTimeField">2024-02-04T17:42:34.911615+00:00</field>
+        <field name="archived" type="BooleanField">False</field>
+        <field name="created_by" rel="ManyToOneRel" to="auth.user">
+            <None></None>
+        </field>
+        <field name="preview" type="FileField"></field>
+    </object>
+    <object model="shopapp.product" pk="6">
+        <field name="name" type="CharField">Phone XS MAX</field>
+        <field name="description" type="TextField">New phone</field>
+        <field name="price" type="DecimalField">499.00</field>
+        <field name="discount" type="SmallIntegerField">5</field>
+        <field name="crested_at" type="DateTimeField">2024-02-11T09:47:47.187754+00:00</field>
+        <field name="archived" type="BooleanField">False</field>
+        <field name="created_by" rel="ManyToOneRel" to="auth.user">
+            <None></None>
+        </field>
+        <field name="preview" type="FileField"></field>
+    </object>
+    <object model="shopapp.product" pk="7">
+        <field name="name" type="CharField">Smartphone 1</field>
+        <field name="description" type="TextField"></field>
+        <field name="price" type="DecimalField">199.00</field>
+        <field name="discount" type="SmallIntegerField">10</field>
+        <field name="crested_at" type="DateTimeField">2024-03-04T12:55:18.159141+00:00</field>
+        <field name="archived" type="BooleanField">False</field>
+        <field name="created_by" rel="ManyToOneRel" to="auth.user">
+            <None></None>
+        </field>
+        <field name="preview" type="FileField"></field>
+    </object>
+    <object model="shopapp.product" pk="8">
+        <field name="name" type="CharField">Smartphone 2</field>
+        <field name="description" type="TextField"></field>
+        <field name="price" type="DecimalField">299.00</field>
+        <field name="discount" type="SmallIntegerField">10</field>
+        <field name="crested_at" type="DateTimeField">2024-03-04T12:55:18.159239+00:00</field>
+        <field name="archived" type="BooleanField">False</field>
+        <field name="created_by" rel="ManyToOneRel" to="auth.user">
+            <None></None>
+        </field>
+        <field name="preview" type="FileField"></field>
+    </object>
+    <object model="shopapp.product" pk="9">
+        <field name="name" type="CharField">Smartphone 3</field>
+        <field name="description" type="TextField"></field>
+        <field name="price" type="DecimalField">399.00</field>
+        <field name="discount" type="SmallIntegerField">10</field>
+        <field name="crested_at" type="DateTimeField">2024-03-04T12:55:18.159290+00:00</field>
+        <field name="archived" type="BooleanField">False</field>
+        <field name="created_by" rel="ManyToOneRel" to="auth.user">
+            <None></None>
+        </field>
+        <field name="preview" type="FileField"></field>
+    </object>
+</django-objects>

@@ -6,6 +6,9 @@ from django.forms import ModelForm
 from django.contrib.auth.models import Group
 
 
+class CSVImportForm(forms.Form):
+    csv_file = forms.FileField()
+
 class ProductForm(forms.ModelForm):
     '''ModelForm - генерирует форму на основе существующей модели'''
     class Meta:
