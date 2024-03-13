@@ -23,6 +23,9 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 
 from django.conf.urls.i18n import i18n_patterns # для явного определения выбранного языка
 
+from django.contrib.sitemaps.views import sitemap
+from .sitemaps import sitemaps
+
 urlpatterns = [
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
@@ -32,6 +35,12 @@ urlpatterns = [
     path('api/schema/swagger', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger'),
     path('api/', include('myapiapp.urls')),
     # path('api/', include('shopapp.urls')),
+    path(
+        "sitemap.xml",
+        sitemap,
+        {"sitemaps": sitemaps},
+        name="django.contrib.sitemaps.views.sitemap",
+    )
 ]
 
 urlpatterns += i18n_patterns(

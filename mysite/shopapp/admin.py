@@ -1,12 +1,14 @@
 from django.contrib import admin
 from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import path
 
+from .common import save_csv_products
 from .models import Product, Order, ProductImage
 from .admin_mixins import ExpotrasCVSMixin
 from .forms import CSVImportForm
+
 
 class OrderInline(admin.TabularInline):
     ''' ProductInline подключает встроенные записи '''
@@ -77,11 +79,25 @@ class ProductAdmin(admin.ModelAdmin, ExpotrasCVSMixin):
 # admin.site.register(Product, ProductAdmin) # 1 вариант
 
     def import_csv(self, request: HttpRequest) -> HttpResponse:
-        form = CSVImportForm()
-        context = {
-        'form': form,
-        }
-        return render(request, "admin/csv_form.html", context)
+        if request.method == "GET":
+            form = CSVImportForm()
+            context = {
+                "form": form,
+            }
+            return render(request, "admin/csv_form.html", context)
+        form = CSVImportForm(request.POST, request.FILES)
+        if not form.is_valid():
+            context = {
+                "form": form,
+            }
+            return render(request, "admin/csv_form.html", context, status=400)
+
+        save_csv_products(
+            file=form.files["csv_file"].file,
+            encoding=request.encoding,
+        )
+        self.message_user(request, "Data from CSV was imported")
+        return redirect("..")
 
     def get_urls(self):
         urls = super().get_urls()
@@ -93,6 +109,7 @@ class ProductAdmin(admin.ModelAdmin, ExpotrasCVSMixin):
             ),
         ]
         return new_urls + urls
+
 
 
 # class ProductInline(admin.TabularInline):
@@ -118,6 +135,40 @@ class OrderAdmin(admin.ModelAdmin):
         ''' user_verbose возвращает first_name (при наличии) или username
         first_name можно добавить через админ панель '''
         return odj.user.first_name or odj.user.username
+
+    change_list_template = "shopapp/orders_changelist.html"
+    def import_csv(self, request: HttpRequest) -> HttpResponse:
+        if request.method == "GET":
+            form = CSVImportForm()
+            context = {
+                "form": form,
+            }
+            return render(request, "admin/csv_form.html", context)
+        form = CSVImportForm(request.POST, request.FILES)
+        if not form.is_valid():
+            context = {
+                "form": form,
+            }
+            return render(request, "admin/csv_form.html", context, status=400)
+
+        save_csv_products(
+            file=form.files["csv_file"].file,
+            encoding=request.encoding,
+        )
+        self.message_user(request, "Data from CSV was imported")
+        return redirect("..")
+
+    def get_urls(self):
+        urls = super().get_urls()
+        new_urls = [
+            path(
+                "import-orders-csv/",
+                self.import_csv,
+                name="import_orders_csv",
+            ),
+        ]
+        return new_urls + urls
+
 
 
 

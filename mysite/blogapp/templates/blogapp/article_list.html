@@ -2,7 +2,7 @@
 
 
 {% block title %}
-    Articles list
+    Articles
 {% endblock %}
 
 {% block body %}
@@ -11,11 +11,10 @@
         <div>
             {% for article in articles %}
                 <div>
-                    <p>Title: {{ article.title }}</p>
-                    <p>Date of publication: {{ article.pub_date }}</p>
-                    <p>Author: {{ article.author }}</p>
-                    <p>Category: {{ article.category }}</p>
-                    <p>Tags: {{ article.tags }}</p>
+                    <p>
+                        <a href="{% url 'blogapp:article' pk=article.pk %}">{{ article.title }}</a>
+                    </p>
+                    <p>Published: {{ article.published_at }}</p>
                 </div>
             {% endfor %}
         </div>

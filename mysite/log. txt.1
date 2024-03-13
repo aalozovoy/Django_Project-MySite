@@ -1,19 +1,21 @@
-2024-03-09 09:17:52,941 [ERROR] django.request: Internal Server Error: /admin/shopapp/product/
+2024-03-13 17:50:29,896 [ERROR] django.request: Internal Server Error: /ru/shop/products/latest/feed/
 Traceback (most recent call last):
   File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
-  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
-    response = response.render()
-  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 38, in sentry_patched_render
-    return old_render(self)
-  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
-    self.content = self.rendered_content
-  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/templates.py", line 75, in rendered_content
-    return real_rendered_content.fget(self)
-  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/template/response.py", line 90, in rendered_content
-    template = self.resolve_template(self.template_name)
-  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/template/response.py", line 74, in resolve_template
-    return get_template(template, using=self.using)
-  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/template/loader.py", line 19, in get_template
-    raise TemplateDoesNotExist(template_name, chain=chain)
-django.template.exceptions.TemplateDoesNotExist: shopapp/products_changelist.html
+  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 84, in sentry_wrapped_callback
+    return callback(request, *args, **kwargs)
+  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/contrib/syndication/views.py", line 40, in __call__
+    feedgen = self.get_feed(obj, request)
+  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/contrib/syndication/views.py", line 194, in get_feed
+    self._get_dynamic_attr("item_link", item),
+  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/contrib/syndication/views.py", line 103, in _get_dynamic_attr
+    return attr(obj)
+  File "/home/aa_lozovoy/PycharmProjects/pythonProject/python_django/mysite/shopapp/views.py", line 94, in item_link
+    return reverse("shopapp:product_detail", kwargs={"pk": item.pk})
+  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 851, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'product_detail' not found. 'product_detail' is not a valid view function or pattern name.

@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 
 
 def product_preview_dir_path(instance: 'Product', filename: str) -> str:
@@ -41,16 +42,12 @@ class Product(models.Model):
     preview = models.ImageField(null=True, blank=True, upload_to=product_preview_dir_path)
     # upload_to=product_preview_dir_path - путь к папке с файлами (через кастомную функцию)
 
-    # сокращение описания в description (см. admin.py)
-    # @property
-    # def description_short(self) -> str:
-    #     if len(self.description) < 50:
-    #         return self.description
-    #     return self.description[:50] + '...'
-
     def __str__(self) -> str:
         return f'Product (pk={self.pk}, name={self.name!r})'
         ''' представление объекта в админ панели, !r - в " " '''
+
+    def get_absolute_url(self):
+        return reverse("shopapp:product", kwargs={"pk": self.pk})
 
 
 def product_imges_dir_path(instance: 'ProductImage', filename: str) -> str:

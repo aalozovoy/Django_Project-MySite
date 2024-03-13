@@ -16,7 +16,8 @@ from .views import (ShopIndexView,
                     OrderUpdateView,
                     ProductsExportView,
                     ProductViewSet,
-                    OrderViewSet)
+                    OrderViewSet,
+                    LatestProductsFeed)
 
 routers = DefaultRouter()
 routers.register('products', ProductViewSet)
@@ -38,4 +39,5 @@ urlpatterns = [
     path("orders/<int:pk>/update/", OrderUpdateView.as_view(), name="order_update"),
     path("orders/<int:pk>/delete/", OrderDeleteView.as_view(), name="order_delete"),
     path("api/", include(routers.urls)),
+    path("products/latest/feed/", LatestProductsFeed(), name="products-feed"),
 ]
