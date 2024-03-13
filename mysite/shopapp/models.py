@@ -47,7 +47,7 @@ class Product(models.Model):
         ''' представление объекта в админ панели, !r - в " " '''
 
     def get_absolute_url(self):
-        return reverse("shopapp:product", kwargs={"pk": self.pk})
+        return reverse("shopapp:product_details", kwargs={"pk": self.pk})
 
 
 def product_imges_dir_path(instance: 'ProductImage', filename: str) -> str:
