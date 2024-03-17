@@ -1,6 +1,7 @@
 
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from django.views.decorators.cache import cache_page
 
 from .views import (ShopIndexView,
                     ProductListView,
@@ -17,7 +18,9 @@ from .views import (ShopIndexView,
                     ProductsExportView,
                     ProductViewSet,
                     OrderViewSet,
-                    LatestProductsFeed)
+                    LatestProductsFeed,
+                    UserOrdersListView,
+                    UserOrdersExportView)
 
 routers = DefaultRouter()
 routers.register('products', ProductViewSet)
@@ -25,7 +28,7 @@ routers.register('orders', OrderViewSet)
 
 app_name = "shopapp"
 urlpatterns = [
-    path("", ShopIndexView.as_view(), name="index"),
+    path("", cache_page(60 * 2)(ShopIndexView.as_view()), name="index"),
     path("groups/", GroupsListView.as_view(), name="groups_list"),
     path("products/", ProductListView.as_view(), name="products_list"),
     path("products/export/", ProductsExportView.as_view(), name="products_export"),
@@ -38,6 +41,8 @@ urlpatterns = [
     path("orders/<int:pk>/", OrdersDetailsView.as_view(), name="order_details"),
     path("orders/<int:pk>/update/", OrderUpdateView.as_view(), name="order_update"),
     path("orders/<int:pk>/delete/", OrderDeleteView.as_view(), name="order_delete"),
+    path("users/<int:user_id>/orders/", UserOrdersListView.as_view(), name="user_orders"),
+    path("users/<int:user_id>/orders/export/", UserOrdersExportView.as_view(), name="user_orders_export"),
     path("api/", include(routers.urls)),
     path("products/latest/feed/", LatestProductsFeed(), name="products-feed"),
 ]

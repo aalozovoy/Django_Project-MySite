@@ -1,21 +1,4 @@
-2024-03-13 17:47:50,144 [ERROR] django.request: Internal Server Error: /ru/shop/products/latest/feed/
-Traceback (most recent call last):
-  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/sentry_sdk/integrations/django/views.py", line 84, in sentry_wrapped_callback
-    return callback(request, *args, **kwargs)
-  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/contrib/syndication/views.py", line 40, in __call__
-    feedgen = self.get_feed(obj, request)
-  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/contrib/syndication/views.py", line 143, in get_feed
-    link = add_domain(current_site.domain, link, request.is_secure())
-  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/contrib/syndication/views.py", line 17, in add_domain
-    if url.startswith("//"):
-  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/utils/functional.py", line 187, in __wrapper__
-    result = func(*self._args, **self._kw)
-  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/urls/base.py", line 88, in reverse
-    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
-  File "/home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 851, in _reverse_with_prefix
-    raise NoReverseMatch(msg)
-django.urls.exceptions.NoReverseMatch: Reverse for 'products' not found. 'products' is not a valid view function or pattern name.
+2024-03-17 09:45:34,443 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2024-03-17 09:45:52,779 [WARNING] django.request: Not Found: /
+2024-03-17 09:45:59,798 [INFO] shopapp.views: Rendering shop index
+2024-03-17 09:50:26,821 [INFO] django.utils.autoreload: /home/aa_lozovoy/PycharmProjects/pythonProject/python_django/mysite/mysite/settings.py changed, reloading.

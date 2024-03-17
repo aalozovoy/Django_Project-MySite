@@ -1,4 +1,4 @@
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 from django.contrib.syndication.views import Feed
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, reverse, get_object_or_404, reverse
@@ -33,9 +33,30 @@ from rest_framework.request import Request
 from csv import DictWriter
 from rest_framework.parsers import MultiPartParser
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
+
 import logging
 
 log = logging. getLogger(__name__)
+
+
+class UserOrdersListView(LoginRequiredMixin, ListView):
+    model = Order
+    template_name = 'shopapp/user_orders_list.html'
+    context_object_name = 'orders'
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('user_id')
+        user = get_object_or_404(User, id=user_id)
+        self.owner = user
+        return Order.objects.filter(user=user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.owner
+        return context
 
 
 class OrderViewSet(ModelViewSet):
@@ -61,22 +82,6 @@ class OrderViewSet(ModelViewSet):
         'user',
         'products',
     ]
-
-
-# class LatestProductsFeed(Feed):
-#     title = 'New products'
-#     description = 'New products'
-#     link = reverse_lazy('shopapp:products')
-#
-#     def items(self):
-#         return Product.objects.all()
-#     def item_title(self, item: Product):
-#         return item.name
-#     def item_description(self, item: Product):
-#         return item.description
-#
-#     def item_link(self, item: Product):
-#         return reverse("shopapp:products", kwargs={"pk": item.pk})
 
 class LatestProductsFeed(Feed):
     title = 'New products'
@@ -115,6 +120,10 @@ class ProductViewSet(ModelViewSet):
         'archived',
     ]
     ordering_fields = ['name', 'price', 'discount',]
+
+    @method_decorator(cache_page(60 * 2))
+    def list(self, *args, **kwargs):
+        return super().list(*args, **kwargs)
 
     @extend_schema(
         summary='Get one product by ID',
@@ -306,17 +315,32 @@ class GroupsListView(View):
 
 class ProductsExportView(View):
     def get(self, request: HttpRequest) -> JsonResponse:
-        products = Product.objects.order_by('pk').all()
-        products_data = []
-        for product in products:
-            product_data = {
-                'pk': product.pk,
-                'name': product.name,
-                'price': product.price,
-                'archived': product.archived,
-            }
-            products_data.append(product_data)
-        elem = products_data[0]
-        name = elem["name"]
-        print("name:", name)
+        cache_key = "products_data_export"
+        products_data = cache.get(cache_key)
+        if products_data is None:
+            products = Product.objects.order_by('pk').all()
+            products_data = []
+            for product in products:
+                product_data = {
+                    'pk': product.pk,
+                    'name': product.name,
+                    'price': product.price,
+                    'archived': product.archived,
+                }
+                products_data.append(product_data)
+            elem = products_data[0]
+            name = elem["name"]
+            print("name:", name)
+            cache.set("products_data_export", products_data, 300)
         return JsonResponse({'products': products_data})
+
+class UserOrdersExportView(View):
+    def get(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+        orders = Order.objects.filter(user=user)
+        data = {
+            'user_id': user.id,
+            'username': user.username,
+            'orders': list(orders.values())
+        }
+        return JsonResponse(data)
