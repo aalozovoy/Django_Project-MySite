@@ -1,4 +1,1 @@
-2024-03-18 12:51:14,395 [INFO] django.utils.autoreload: /home/aa_lozovoy/PycharmProjects/pythonProject/python_django/mysite/mysite/settings.py changed, reloading.
-2024-03-18 12:51:14,986 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
-2024-03-18 12:51:21,063 [INFO] shopapp.views: Rendering shop index
-2024-03-18 13:10:06,166 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2024-03-19 12:53:17,197 [INFO] django.utils.autoreload: /home/aa_lozovoy/PycharmProjects/pythonProject/.venv/lib/python3.10/site-packages/django/conf/locale/__init__.py changed, reloading.
